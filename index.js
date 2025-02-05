@@ -12,6 +12,12 @@ const bot = new Telegraf(process.env.BOT_API);
 
 bot.start((ctx) => ctx.reply("You're Welcome here, How can i help you?"));
 bot.help((ctx) => ctx.reply("Please Contact with my owner @Shyam_k_s"));
+bot.on(message('sticker'), (ctx) => ctx.reply('👍'));
+bot.on('message', async(ctx) => {
+    if(message.document || message.photo || message.video || message.audio || message.voice || message.video_note || message.sticker || message.contact || message.location || message.venue || message.poll || message.dice || message.game || message.animation){
+        ctx.reply("Sorry, File input is not allowed. Please send text messages only.");
+    }
+})
 bot.on(message('text'), async (ctx) => {
     let question = ctx.update.message.text;
     if (question == 'who developed you?' || question == 'who developed you' || question == 'who have developed you' || question == 'who have developed you?' || question == 'who have developed you'
@@ -37,6 +43,8 @@ bot.on(message('text'), async (ctx) => {
         })
     }
 })
+
+
 
 bot.launch();
 app.listen(PORT, () => {
