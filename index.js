@@ -6,12 +6,10 @@ import axios from "axios";
 dotenv.config();
 const PORT = process.env.PORT || 8080;
 const app = express();
+app.use(express.json());
 
 const bot = new Telegraf(process.env.BOT_API);
 
-app.get("/", (req, res) => {
-    res.send("Site is working....");
-})
 
 bot.start((ctx) => ctx.reply("You're Welcome here, How can i help you?"));
 bot.help((ctx) => ctx.reply("Please Contact with my owner @Shyam_k_s"));
@@ -41,10 +39,26 @@ bot.on(message('text'), async (ctx) => {
     }
 })
 
+app.get("/webhook", (req, res) => {
+    bot.handleUpdate(req.body);
+    res.send('OK');
+})
+
+const setWebhook = async () => {
+    try {
+        const response = await axios.get(`https://api.telegram.org/bot${process.env.BOT_API}/setWebhook?url=https://telegrambot-rouge-beta.vercel.app/webhook`); // Replace with your webhook URL
+        console.log("Webhook set:", response.data);
+    } catch (error) {
+        console.error("Error setting webhook:", error);
+    }
+};
+
 bot.launch();
-process.once('SIGINT', () => bot.stop('SIGINT'))
-process.once('SIGTERM', () => bot.stop('SIGTERM'))
 
 app.listen(PORT, () => {
     console.log(`app is listening to the port : ${PORT}`);
+    setWebhook();
 })
+
+process.once('SIGINT', () => bot.stop('SIGINT'))
+process.once('SIGTERM', () => bot.stop('SIGTERM'))
