@@ -1,8 +1,12 @@
+import express from 'express'
 import { Telegraf } from "telegraf";
 import { message } from 'telegraf/filters'
 import dotenv from 'dotenv'
 import axios from "axios";
 dotenv.config();
+const PORT = process.env.PORT || 8080;
+const app = express();
+
 const bot = new Telegraf(process.env.BOT_API);
 
 bot.start((ctx) => ctx.reply("You're Welcome here, How can i help you?"));
@@ -36,3 +40,7 @@ bot.on(message('text'), async (ctx) => {
 bot.launch();
 process.once('SIGINT', () => bot.stop('SIGINT'))
 process.once('SIGTERM', () => bot.stop('SIGTERM'))
+
+app.listen(PORT, () => {
+    console.log(`app is listening to the port : ${PORT}`);
+})
