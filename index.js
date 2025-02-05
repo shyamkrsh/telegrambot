@@ -13,6 +13,7 @@ const bot = new Telegraf(process.env.BOT_API);
 bot.start((ctx) => ctx.reply("You're Welcome here, How can i help you?"));
 bot.help((ctx) => ctx.reply("Please Contact with my owner @Shyam_k_s"));
 bot.on(message('text'), async (ctx) => {
+    const generatingMessage = await ctx.reply("Generating...");
     let question = ctx.update.message.text;
     if (question == 'who developed you?' || question == 'who developed you' || question == 'who have developed you' || question == 'who have developed you?' || question == 'who have developed you'
         || question == 'tumko kisne develop kiya?' || question == 'tumko kisne develop kiya' || question == 'aapko kisne develop kiya?' || question == 'tumko kisne banaya ?'
@@ -32,6 +33,7 @@ bot.on(message('text'), async (ctx) => {
             }]
         }).then(async (res) => {
             await ctx.reply(res.data.candidates[0].content.parts[0].text);
+            await ctx.deleteMessage(generatingMessage.message_id);
         }).catch(async (err) => {
             await ctx.reply(`Facing some dificulties, try after sometime`);
         })
