@@ -32,7 +32,7 @@ bot.on(message('text'), async (ctx) => {
         await ctx.reply("I am a TechBot and, i am here to assist you.");
     } 
     else {
-        axios.post(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBfjro3dw9hviS_4YllqafkuwPEKT-P5UM`, {
+        await axios.post(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBfjro3dw9hviS_4YllqafkuwPEKT-P5UM`, {
             "contents": [{
                 "parts": [{ "text": `${question}` }]
             }]
