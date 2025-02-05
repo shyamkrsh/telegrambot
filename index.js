@@ -61,7 +61,7 @@ bot.on(message('text'), async (ctx) => {
         await ctx.reply(res.data.candidates[0].content.parts[0].text);
         await ctx.deleteMessage(generatingMessage.message_id);
     } catch (err) {
-        await ctx.reply(`Facing some difficulties, try after some time. ${err}`);
+        await ctx.reply(`Facing some difficulties, try after some time.`);
         await ctx.deleteMessage(generatingMessage.message_id);
     }
 });
