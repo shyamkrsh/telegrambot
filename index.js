@@ -6,7 +6,8 @@ import axios from 'axios';
 
 dotenv.config();
 
-const PORT = process.env.PORT || 3000; 
+
+const PORT = process.env.PORT || 3000;
 const app = express();
 app.use(express.json());
 
@@ -41,27 +42,27 @@ bot.on(message('text'), async (ctx) => {
         "aap kaun hai": "Main ek TechBot hoon aur, main aapki madad ke liye hun.",
     };
 
-    const answer = predefinedAnswers[question.toLowerCase()]; 
+    const answer = predefinedAnswers[question.toLowerCase()];
 
     if (answer) {
         await ctx.reply(answer);
-        await ctx.deleteMessage(generatingMessage.message_id); 
+        await ctx.deleteMessage(generatingMessage.message_id);
         return;
     }
 
     try {
-        const res = await axios.post(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBfjro3dw9hviS_4YllqafkuwPEKT-P5UM`, { 
+
+        const res = await axios.post(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`, {
             "contents": [{
                 "parts": [{ "text": `${question}` }]
             }]
         });
 
         await ctx.reply(res.data.candidates[0].content.parts[0].text);
-        console.log(res.data.candidates[0].content.parts[0].text)
         await ctx.deleteMessage(generatingMessage.message_id);
     } catch (err) {
-        await ctx.reply(`Facing some difficulties, try after some time.`);
-        await ctx.deleteMessage(generatingMessage.message_id); 
+        await ctx.reply(`Facing some difficulties, try after some time. ${err}`);
+        await ctx.deleteMessage(generatingMessage.message_id);
     }
 });
 
@@ -69,14 +70,14 @@ bot.on(message('text'), async (ctx) => {
 bot.on(message('sticker'), (ctx) => ctx.reply('👍'));
 
 bot.on('message', async (ctx) => {
-    const allowedMessageTypes = ['text']; 
+    const allowedMessageTypes = ['text'];
     if (!allowedMessageTypes.includes(ctx.message.type)) {
         ctx.reply("Sorry, File input is not allowed. Please send text messages only.");
     }
 });
 
 // Vercel-specific configuration
-app.get('/', (req, res) => res.send('Bot is running!')); 
+app.get('/', (req, res) => res.send('Bot is running!'));
 app.use(bot.webhookCallback('/telegraf')); 
 
 
@@ -88,5 +89,6 @@ if (process.env.VERCEL_URL) {
     bot.telegram.setWebhook(`${process.env.VERCEL_URL}/telegraf`).then(() => console.log("Webhook set successfully!")).catch(e => console.log("Webhook set failed", e));
 }
 
+bot.launch();
 process.once('SIGINT', () => bot.stop('SIGINT'));
 process.once('SIGTERM', () => bot.stop('SIGTERM'));
