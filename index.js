@@ -9,6 +9,10 @@ const app = express();
 
 const bot = new Telegraf(process.env.BOT_API);
 
+app.get("/", (req, res) => {
+    res.send("Site is working....");
+})
+
 bot.start((ctx) => ctx.reply("You're Welcome here, How can i help you?"));
 bot.help((ctx) => ctx.reply("Please Contact with my owner @Shyam_k_s"));
 bot.on(message('text'), async (ctx) => {
