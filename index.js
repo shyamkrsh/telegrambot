@@ -38,25 +38,9 @@ bot.on(message('text'), async (ctx) => {
     }
 })
 
-app.get("/webhook", (req, res) => {
-    bot.handleUpdate(req.body);
-    res.send('OK');
-})
-
-const setWebhook = async () => {
-    try {
-        const response = await axios.get(`https://api.telegram.org/bot${process.env.BOT_API}/setWebhook?url=https://telegrambot-rouge-beta.vercel.app`); // Replace with your webhook URL
-        console.log("Webhook set:", response.data);
-    } catch (error) {
-        console.error("Error setting webhook:", error);
-    }
-};
-
 bot.launch();
-
 app.listen(PORT, () => {
     console.log(`app is listening to the port : ${PORT}`);
-    setWebhook();
 })
 
 process.once('SIGINT', () => bot.stop('SIGINT'))
