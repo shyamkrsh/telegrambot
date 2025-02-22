@@ -1,7 +1,6 @@
 import express from 'express'
 const app = express();
 const port = process.env.PORT || 8080;
-import axios from 'axios';
 import dotenv from 'dotenv'
 dotenv.config();
 import { Telegraf } from 'telegraf'
