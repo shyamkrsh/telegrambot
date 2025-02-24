@@ -6,12 +6,48 @@ dotenv.config();
 import { Telegraf } from 'telegraf'
 import { message } from 'telegraf/filters'
 import { GoogleGenerativeAI } from "@google/generative-ai";
-
+const canvas = require('canvas');
+const fs = require('fs');
+const { createCanvas } = require('canvas');
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
 const bot = new Telegraf(process.env.BOT_API);
+
+
+
+function generateImage(text) {
+    const width = 800;
+    const height = 300;
+
+    // Create a canvas
+    const canvas = createCanvas(width, height);
+    const ctx = canvas.getContext('2d');
+
+    // Background color
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, width, height);
+
+    // Text settings
+    ctx.fillStyle = '#000000';
+    ctx.font = 'bold 50px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    // Draw text on canvas
+    ctx.fillText(text, width / 2, height / 2);
+
+    // Convert to Buffer
+    return canvas.toBuffer(); // Returns image as a buffer
+}
+
+
+
+
+
+
+
 
 bot.start((ctx) => ctx.reply("How can i help you ?"));
 bot.help((ctx) => ctx.reply("Please Contact with my owner @Shyam_k_s"));
@@ -26,6 +62,11 @@ bot.on(message('text'), async (ctx) => {
             { caption: "<strong>Shyam Kumar Sharma</strong>\n\n Here is Shyam's Resume.", parse_mode: 'HTML' }
         );
         await ctx.deleteMessage(generatingMessage.message_id);
+        return;
+    }
+    if(caseCheck === 'hi' || caseCheck === 'hello' || caseCheck === 'Hi' || caseCheck === 'Hello' || caseCheck === 'Hii'){
+        const imageBuffer = generateImage('Hello Shyam How are you? ');
+        await ctx.replyWithPhoto({ source: imageBuffer });
         return;
     }
 
