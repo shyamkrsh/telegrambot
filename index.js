@@ -6,9 +6,9 @@ dotenv.config();
 import { Telegraf } from 'telegraf'
 import { message } from 'telegraf/filters'
 import { GoogleGenerativeAI } from "@google/generative-ai";
-const canvas = require('canvas');
-const fs = require('fs');
-const { createCanvas } = require('canvas');
+import { Canvas } from 'canvas';
+import { createCanvas } from 'canvas';
+import fs from 'fs';
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
@@ -41,12 +41,6 @@ function generateImage(text) {
     // Convert to Buffer
     return canvas.toBuffer(); // Returns image as a buffer
 }
-
-
-
-
-
-
 
 
 bot.start((ctx) => ctx.reply("How can i help you ?"));
