@@ -20,11 +20,9 @@ const bot = new Telegraf(process.env.BOT_API);
 function generateImage(text) {
     const width = 800;
     const height = 300;
-
     // Create a canvas
     const canvas = createCanvas(width, height);
     const ctx = canvas.getContext('2d');
-
     // Background color
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, width, height);
